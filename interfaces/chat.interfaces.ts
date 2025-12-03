@@ -1,8 +1,10 @@
+export type Sender = "user" | "gemini";
+
 interface IMessage {
   id: string;
   createdAt: Date;
-  sender: 'user' | 'gemini';
-  type: 'text' | 'image';
+  sender: Sender;
+  type: "text" | "image";
 }
 
 export interface ImagesMessage extends IMessage {
