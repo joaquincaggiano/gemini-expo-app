@@ -4,11 +4,11 @@ import { useBasicPromptStore } from "@/store/basic-prompt/basicPrompt.store";
 import { Layout } from "@ui-kitten/components";
 
 const BasicPromptScreen = () => {
-  const { messages, addMessage } = useBasicPromptStore();
+  const { messages, geminiWriting, addMessage } = useBasicPromptStore();
 
   return (
     <Layout style={{ flex: 1 }}>
-      <ChatMessages messages={messages} />
+      <ChatMessages messages={messages} isGeminiWriting={geminiWriting} />
 
       <CustomInputBox onSendMessage={addMessage} />
     </Layout>

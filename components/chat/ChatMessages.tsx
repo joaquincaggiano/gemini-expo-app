@@ -1,20 +1,23 @@
-import { Layout, List, Text } from '@ui-kitten/components';
-import { Fragment } from 'react';
-import { Image } from 'react-native';
+import { Layout, List, Text } from "@ui-kitten/components";
+import { Fragment } from "react";
+import { Image } from "react-native";
 
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { useThemeColor } from "@/hooks/useThemeColor";
 import {
   ImagesMessage,
   Message,
   TextMessage,
-} from '@/interfaces/chat.interfaces';
+} from "@/interfaces/chat.interfaces";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 interface Props {
   messages: Message[];
+  isGeminiWriting: boolean;
 }
 
-export const ChatMessages = ({ messages }: Props) => {
-  const primaryColor = useThemeColor({}, 'icon');
+export const ChatMessages = ({ messages, isGeminiWriting }: Props) => {
+  const primaryColor = useThemeColor({}, "icon");
+  const bgColor = useThemeColor({}, "background");
 
   return (
     <Layout style={{ flex: 1 }}>
@@ -23,7 +26,7 @@ export const ChatMessages = ({ messages }: Props) => {
         inverted
         style={{ paddingHorizontal: 16 }}
         renderItem={({ item }) => {
-          if (item.type === 'text') {
+          if (item.type === "text") {
             return (
               <MessageItem
                 message={item as TextMessage}
@@ -40,6 +43,19 @@ export const ChatMessages = ({ messages }: Props) => {
           );
         }}
       />
+
+      {isGeminiWriting && (
+        <Animated.View
+          style={{
+            paddingHorizontal: 16,
+            paddingVertical: 10,
+            backgroundColor: bgColor,
+          }}
+          entering={FadeInDown}
+        >
+          <Text>Gemini está escribiendo...</Text>
+        </Animated.View>
+      )}
     </Layout>
   );
 };
@@ -51,23 +67,23 @@ const MessageItem = ({
   message: TextMessage;
   userColor: string;
 }) => {
-  const isCurrentUser = message.sender === 'user';
+  const isCurrentUser = message.sender === "user";
 
   return (
     <Layout
       style={{
         marginVertical: 4,
-        alignItems: isCurrentUser ? 'flex-end' : 'flex-start',
-        backgroundColor: isCurrentUser ? userColor : '#EBEBEB',
+        alignItems: isCurrentUser ? "flex-end" : "flex-start",
+        backgroundColor: isCurrentUser ? userColor : "#EBEBEB",
         padding: 10,
         borderRadius: 16,
         borderBottomLeftRadius: isCurrentUser ? 0 : 16,
         borderBottomRightRadius: isCurrentUser ? 16 : 0,
-        maxWidth: '80%',
-        alignSelf: isCurrentUser ? 'flex-end' : 'flex-start',
+        maxWidth: "80%",
+        alignSelf: isCurrentUser ? "flex-end" : "flex-start",
       }}
     >
-      <Text style={{ color: isCurrentUser ? 'white' : 'black' }}>
+      <Text style={{ color: isCurrentUser ? "white" : "black" }}>
         {message.text}
       </Text>
     </Layout>
@@ -81,7 +97,7 @@ const MessageItemImage = ({
   message: ImagesMessage;
   userColor: string;
 }) => {
-  const isCurrentUser = message.sender === 'user';
+  const isCurrentUser = message.sender === "user";
   const isMultipleImages = message.images && message.images.length > 1;
 
   return (
@@ -89,15 +105,15 @@ const MessageItemImage = ({
       <Layout
         style={{
           marginVertical: 4,
-          alignItems: isCurrentUser ? 'flex-end' : 'flex-start',
-          backgroundColor: 'transparent',
+          alignItems: isCurrentUser ? "flex-end" : "flex-start",
+          backgroundColor: "transparent",
         }}
       >
         <Layout
           style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            flexDirection: "row",
+            flexWrap: "wrap",
+            justifyContent: "center",
             gap: 8,
           }}
         >
