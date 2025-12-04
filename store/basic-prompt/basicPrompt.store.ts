@@ -1,4 +1,4 @@
-import { basicPromptAction } from "@/core/actions/gemini/basic-prompt.action";
+import { basicPromptStreamAction } from "@/core/actions/gemini/basic-prompt-stream.action";
 import { Message, Sender } from "@/interfaces/chat.interfaces";
 import uuid from "react-native-uuid";
 import { create } from "zustand";
@@ -23,22 +23,32 @@ const createMessage = (text: string, sender: Sender): Message => {
 export const useBasicPromptStore = create<BasicPromptState>((set) => ({
   geminiWriting: false,
   messages: [],
-  addMessage: async (text: string) => {
-    const userMessage = createMessage(text, "user");
+  addMessage: async (prompt: string) => {
+    const userMessage = createMessage(prompt, "user");
+    const geminiMessage = createMessage("Generando respuesta...", "gemini");
 
     set((state) => ({
-      geminiWriting: true,
-      messages: [userMessage, ...state.messages],
+      // geminiWriting: true,
+      messages: [geminiMessage, userMessage, ...state.messages],
     }));
 
-    // Peticion a Gemini
-    const geminiResponse = await basicPromptAction(text);
-    const geminiMessage = createMessage(geminiResponse, "gemini");
+    // Peticion a Gemini (basic prompt stream)
+    await basicPromptStreamAction(prompt, (text) => {
+      set((state) => ({
+        messages: state.messages.map((msg) =>
+          msg.id === geminiMessage.id ? { ...msg, text } : msg
+        ),
+      }));
+    });
 
-    set((state) => ({
-      geminiWriting: false,
-      messages: [geminiMessage, ...state.messages],
-    }));
+    // Peticion a Gemini (basic prompt)
+    // const geminiResponse = await basicPromptAction(prompt);
+    // const geminiMessage = createMessage(geminiResponse, "gemini");
+
+    // set((state) => ({
+    //   geminiWriting: false,
+    //   messages: [geminiMessage, ...state.messages],
+    // }));
   },
   setGeminiWriting: (isWriting: boolean) => set({ geminiWriting: isWriting }),
 }));

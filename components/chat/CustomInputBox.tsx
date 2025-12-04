@@ -2,7 +2,6 @@ import { Button, Input, Layout } from "@ui-kitten/components";
 import { KeyboardAvoidingView, Platform } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { useBasicPromptStore } from "@/store/basic-prompt/basicPrompt.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 interface Props {
@@ -13,12 +12,10 @@ interface Props {
 const CustomInputBox = ({ attachments = [], onSendMessage }: Props) => {
   const isAndroid = Platform.OS === "android";
   const iconColor = useThemeColor({}, "icon");
-  const { geminiWriting } = useBasicPromptStore();
   const [text, setText] = useState("");
 
   const handleSendMessage = () => {
     if (text.trim().length === 0) return;
-    if (geminiWriting) return;
 
     onSendMessage(text.trim());
     setText("");
