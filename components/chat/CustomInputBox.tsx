@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform } from "react-native";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
+import { getGalleryImages } from "@/core/actions/image-picker/get-gallery-images";
 interface Props {
   attachments?: any[];
   onSendMessage: (message: string, attachments?: any[]) => void;
@@ -19,6 +20,10 @@ const CustomInputBox = ({ attachments = [], onSendMessage }: Props) => {
 
     onSendMessage(text.trim());
     setText("");
+  };
+
+  const handlePickImages = async () => {
+    const selectedImages = await getGalleryImages();
   };
 
   return (
@@ -50,6 +55,7 @@ const CustomInputBox = ({ attachments = [], onSendMessage }: Props) => {
         }}
       >
         <Button
+          onPress={handlePickImages}
           appearance="ghost"
           accessoryRight={
             <Ionicons name="attach-outline" size={22} color={iconColor} />
