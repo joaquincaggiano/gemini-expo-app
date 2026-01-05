@@ -14,7 +14,7 @@ export const getGalleryImages = async (): Promise<
     aspect: [4, 3],
     allowsMultipleSelection: true,
     quality: 1,
-    selectionLimit: 3,
+    selectionLimit: 4,
   });
 
   if (result.canceled) {

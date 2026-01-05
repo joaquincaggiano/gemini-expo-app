@@ -10,7 +10,12 @@ const BasicPromptScreen = () => {
     <Layout style={{ flex: 1 }}>
       <ChatMessages messages={messages} isGeminiWriting={geminiWriting} />
 
-      <CustomInputBox onSendMessage={addMessage} />
+      <CustomInputBox
+        onSendMessage={(message, attachments) => {
+          console.log(attachments);
+          addMessage(message);
+        }}
+      />
     </Layout>
   );
 };
