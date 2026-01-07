@@ -13,10 +13,10 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 
 interface Props {
   messages: Message[];
-  isGeminiWriting: boolean;
+  isGeminiWriting?: boolean;
 }
 
-export const ChatMessages = ({ messages, isGeminiWriting }: Props) => {
+export const ChatMessages = ({ messages, isGeminiWriting = false }: Props) => {
   const primaryColor = useThemeColor({}, "icon");
   const bgColor = useThemeColor({}, "background");
 
