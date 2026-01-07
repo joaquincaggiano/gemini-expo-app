@@ -3,12 +3,19 @@ import { FileType, promptWithFiles } from "../helpers/prompt-with-images";
 
 const API_URL = process.env.EXPO_PUBLIC_GEMINI_API_URL;
 
-export const getChatStream = async (
-  prompt: string,
-  chatId: string,
-  files: FileType[],
-  onChunk: (chunk: string) => void
-) => {
+export interface ChatStreamBody {
+  prompt: string;
+  chatId: string;
+  files: FileType[];
+  onChunk: (chunk: string) => void;
+}
+
+export const getChatStream = async ({
+  prompt,
+  chatId,
+  files,
+  onChunk,
+}: ChatStreamBody) => {
   if (files.length > 0) {
     const response = await promptWithFiles(
       "/chat-stream",
