@@ -1,3 +1,4 @@
+import { ImagePickerAsset } from "expo-image-picker";
 import { FileType, promptWithFiles } from "../helpers/prompt-with-images";
 
 export interface ImageGenerationResponse {
@@ -7,7 +8,7 @@ export interface ImageGenerationResponse {
 
 export const imageGenerationAction = async (
   prompt: string,
-  files: FileType[]
+  files: (FileType | ImagePickerAsset)[]
 ): Promise<ImageGenerationResponse> => {
   const { imageUrl, text } = await promptWithFiles<ImageGenerationResponse>(
     "/image-generation",
