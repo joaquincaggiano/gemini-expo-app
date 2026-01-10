@@ -9,7 +9,7 @@ export const basicPromptStreamAction = async (
   onChunk: (chunk: string) => void
 ) => {
   if (files.length > 0) {
-    const response = await promptWithFiles(
+    const response = await promptWithFiles<string>(
       "/basic-prompt-stream",
       { prompt },
       files
