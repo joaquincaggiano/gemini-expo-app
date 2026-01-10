@@ -59,7 +59,32 @@ export const useImagePlaygroundStore = create<ImagePlaygroundState>()(
       }, 500);
     },
 
-    generateNextImage: async () => {},
+    generateNextImage: async () => {
+      const currentImages = get().images;
+      const currenthistory = get().history;
+      let previousPrompt = get().previousPrompt;
+      const previousImages = get().previousImages;
+
+      set({
+        isGenerating: true,
+      });
+
+      const { imageUrl } = await imageGenerationAction(
+        previousPrompt,
+        previousImages
+      );
+
+      if (imageUrl === "") {
+        set({ isGenerating: false });
+        return;
+      }
+
+      set({
+        isGenerating: false,
+        images: [...currentImages, imageUrl],
+        history: [imageUrl, ...currenthistory],
+      });
+    },
 
     setSelectedStyle: (style: string) => {
       if (get().selectedStyle === style) {
